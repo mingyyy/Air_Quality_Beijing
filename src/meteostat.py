@@ -31,7 +31,7 @@ def station_metadata(station):
     r = requests.get(url=url)
     data = r.json()
     if data:
-        pprint(data)
+        return data['data']
     else:
         return "Sorry, something went wrong, please check your url."
 
@@ -54,6 +54,27 @@ def station_metadata(station):
 '''
 
 
+def get_historical(freq, station, start, end):
+    '''
+    :param freq: hourly/daily/weekly in string format
+    :param station: station id
+    :param start: start date in format 'yyyy-mm-dd'
+    :param end: end date in format 'yyyy-mm-dd'
+    :return: list of dictionaries
+    '''
+    url = f'https://api.meteostat.net/v1/history/{freq}?station={station}&start={start}&end={end}&key={key}'
+    r = requests.get(url=url)
+    data = r.json()
+    if data:
+        return data['data']
+    else:
+        return "Sorry, something went wrong, please check your url."
+
+
 if __name__ == '__main__':
-    print(search_station('Beijing'))
-    station_metadata('54511')
+    # print(search_station('Beijing'))
+    # pprint(station_metadata('54511'))
+    hist = get_historical('hourly', '54511', '2020-01-08', '2020-01-08')
+
+    # spark_json = sc.parallelize(hist)
+    # spark_df = sqlContext.read.json(spark_json)
