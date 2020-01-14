@@ -24,10 +24,17 @@ from datahub
 
 ### Overview
 
+#### Pipeline
+
+#### Technology
+
+Python, Spark, Redshift, Airflow
+
 ### Extraction
 
 Most of the efforts are dedicated to sourcing data from various public open data projects. 
-1. From the meteostat API, we could have the historical hourly/daily/weekly weather records based on synoptical observations and METAR data. 
+#### Source 1. meteostat API
+From the meteostat API, we could have the historical hourly/daily/weekly weather records based on synoptical observations and METAR data. 
 Note: gaps in the time series are filled with statistically optimised MOSMIX model data.
 
 Given station id, start date, end date, time zone and time format, we get the following data points:
@@ -36,9 +43,43 @@ Given station id, start date, end date, time zone and time format, we get the fo
 
 Currently, the hourly dataset contains records from *1945-10-31* to *2020-01-08*. 
 
-2. 
+#### Source 2. CMA weather station Data
+Based on the description at the website, We hve the Data Set and Attribute information for the well-defined data.
+Since this is a one time historical clean data set, the idea here is to download the zip file to HDFS for further transformation
+
+This data set includes hourly air pollutants data from 12 nationally-controlled air-quality monitoring sites. 
+The air-quality data are from the Beijing Municipal Environmental Monitoring Center. 
+The meteorological data in each air-quality site are matched with the nearest weather station from the China Meteorological Administration (CMA). 
+The time period is from March 1st, 2013 to February 28th, 2017. Missing data are denoted as NA.
+
+Attribute | Explanation
+--- |  ---
+No | row number
+year | year of data in this row 
+month | month of data in this row 
+day | day of data in this row 
+hour | hour of data in this row 
+PM2.5 | PM2.5 concentration (ug/m^3) 
+PM10 | PM10 concentration (ug/m^3) 
+SO2 | SO2 concentration (ug/m^3) 
+NO2 | NO2 concentration (ug/m^3) 
+CO | CO concentration (ug/m^3) 
+O3 | O3 concentration (ug/m^3) 
+TEMP | temperature (degree Celsius) 
+PRES | pressure (hPa) 
+DEWP | dew point temperature (degree Celsius) 
+RAIN | precipitation (mm) 
+wd | wind direction 
+WSPM | wind speed (m/s) 
+station | name of the air-quality monitoring site
+
+#### AQI
+ 
+This dataset could be downloaded directly in text format, containing hourly AQI (air quality index) reading starting 
+from 2010-03-01 to 2016-05-31.
 
 ### Transformation
+
 
 ### Load
 
