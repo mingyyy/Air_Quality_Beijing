@@ -1,6 +1,7 @@
 import requests
 from mi import meteostat_key
 from pprint import pprint
+from datetime import datetime
 
 key = meteostat_key
 endpoint = 'https://api.meteostat.net/{VERSION}/{PACKAGE}/{METHOD}?{PARAMETERS}'
@@ -36,6 +37,7 @@ def station_metadata(station):
         return "Sorry, something went wrong, please check your url."
 
 '''
+data = 
 {'data': {'country': {'code': 'CN', 'name': 'China'},
           'elevation': '55',
           'iata': 'PEK',
@@ -52,6 +54,20 @@ def station_metadata(station):
           'wmo': '54511'},
  'meta': {}}
 '''
+
+
+def start_end_date(station, freq):
+    '''
+    :param station: station_id
+    :return: meta information for station with inventory
+    '''
+    url = f'https://api.meteostat.net/v1/stations/meta?station={station}&inventory=1&key={key}'
+    r = requests.get(url=url)
+    data = r.json()
+    if data:
+        return data['data']['inventory'][freq]['start'], data['data']['inventory'][freq]['end']
+    else:
+        return "Sorry, something went wrong, please check your url."
 
 
 def get_historical(freq, station, start, end):
@@ -73,8 +89,20 @@ def get_historical(freq, station, start, end):
 
 if __name__ == '__main__':
     # print(search_station('Beijing'))
-    # pprint(station_metadata('54511'))
-    hist = get_historical('hourly', '54511', '2020-01-08', '2020-01-08')
+    start_date, end_date = start_end_date('54511', 'hourly')
+    print(start_date, end_date)
+
+    end = datetime.strptime(end_date, '%Y-%m-%d')
+    if (datetime.now() - end).days > 0:
+        print(end, type(end))
+    else:
+        print("end date is ahead!")
+
+    # hist = get_historical('daily', '54511', end_date, end_date)
+    # pprint(hist)
 
     # spark_json = sc.parallelize(hist)
     # spark_df = sqlContext.read.json(spark_json)
+    # or
+    # from pyspark.sql import Row
+    # spark.createDataFrame(Row(**x) for x in hist).show(truncate=False)

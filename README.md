@@ -23,12 +23,15 @@ originally from Center for Statistical Science, Peking University.
 from datahub
 
 ### Overview
-
+Based on the current available data sets, we have decided on the following pipeline: extraction, load, transformation (ETL in short). 
+After loading the three data sets, transformation is needed to make sure the data sets are cleaned, merged and casted into the 
+right formats for further analysis which is mostly likely includes prediction of air quality in Beijing. 
 #### Pipeline
 
-#### Technology
 
-Python, Spark, Redshift, Airflow
+
+#### Technology
+As seen in the above chart, the following technologies are chosen: Python, Spark, Redshift, Airflow.
 
 ### Extraction
 
@@ -73,13 +76,23 @@ wd | wind direction
 WSPM | wind speed (m/s) 
 station | name of the air-quality monitoring site
 
-#### AQI
+#### Source 3. AQI
  
 This dataset could be downloaded directly in text format, containing hourly AQI (air quality index) reading starting 
 from 2010-03-01 to 2016-05-31.
 
+#### Error Handling
+As an important part of the extraction effort, especially in production, error handling is of high importance. 
+Here are a few aspects, we need to consider:
+1. Data is not available at the given URL.
+2. Access issue due to lack of authority, wrong(out-dated) API key or any other unforeseeable reasons.
+3. Data is not loaded correctly, e.g. incorrect format, wrong columns, displaced information etc.
+4. 
+
 ### Transformation
 
+After loading three datasets from their respective resources, we have to merge the data in a meaningful fashion to 
+provide the most complete and reasonable dataset for further analysis. 
 
 ### Load
 
